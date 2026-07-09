@@ -335,8 +335,9 @@
             }
         }
     </style>
-</head>
-<body class="bg-parchment text-ink min-h-screen flex flex-col antialiased selection:bg-wine/10 selection:text-wine">
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    </head>
+    <body class="bg-parchment text-ink min-h-screen flex flex-col antialiased selection:bg-wine/10 selection:text-wine">
 
     <!-- Masthead -->
     <header id="site-header" class="sticky top-0 z-50 bg-parchment/90 border-b border-transparent">
