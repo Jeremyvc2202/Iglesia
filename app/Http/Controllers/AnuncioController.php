@@ -6,27 +6,46 @@ use App\Models\Anuncio;
 use App\Models\Culto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class AnuncioController extends Controller
 {
     public function index()
     {
-        $anuncios = Anuncio::where('activo', true)
-            ->orderByRaw('fecha_evento IS NULL ASC')
-            ->orderBy('fecha_evento', 'asc')
-            ->orderByDesc('created_at')
-            ->get();
+        try {
+            $anuncios = Anuncio::where('activo', true)
+                ->orderByRaw('fecha_evento IS NULL ASC')
+                ->orderBy('fecha_evento', 'asc')
+                ->orderByDesc('created_at')
+                ->get();
+        } catch (Exception $e) {
+            $anuncios = collect();
+        }
 
-        // Aseguramos que solo se muestren los cultos activos en la vista pública
-        $cultos = Culto::where('activo', true)->get();
+        try {
+            // Aseguramos que solo se muestren los cultos activos en la vista pública
+            $cultos = Culto::where('activo', true)->get();
+        } catch (Exception $e) {
+            $cultos = collect();
+        }
 
         return view('anuncios.index', compact('anuncios', 'cultos'));
     }
 
     public function admin()
     {
-        $anuncios = Anuncio::orderByDesc('created_at')->get();
-        $cultos = Culto::all();
+        try {
+            $anuncios = Anuncio::orderByDesc('created_at')->get();
+        } catch (Exception $e) {
+            $anuncios = collect();
+        }
+
+        try {
+            $cultos = Culto::all();
+        } catch (Exception $e) {
+            $cultos = collect();
+        }
+
         return view('anuncios.admin', compact('anuncios', 'cultos'));
     }
 
