@@ -22,14 +22,15 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev \
     libzip-dev \
+    libpq-dev \
     zip \
     unzip \
     git \
     bash
 
-# Instalar extensiones PHP
+# Instalar extensiones PHP (incluyendo soporte para PostgreSQL)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql gd zip bcmath
+    && docker-php-ext-install pdo_mysql pdo_pgsql gd zip bcmath
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -48,10 +49,10 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # --- CÓDIGO NUEVO PARA PERMISOS ---
 # Crear carpetas necesarias
 RUN mkdir -p /var/www/html/storage/framework/sessions \
-             /var/www/html/storage/framework/views \
-             /var/www/html/storage/framework/cache \
-             /var/www/html/storage/logs \
-             /var/www/html/bootstrap/cache
+              /var/www/html/storage/framework/views \
+              /var/www/html/storage/framework/cache \
+              /var/www/html/storage/logs \
+              /var/www/html/bootstrap/cache
 
 # Asignar permisos totales (soluciona el Failed to open stream)
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
