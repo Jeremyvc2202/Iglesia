@@ -4,10 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Culto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
 
 class CultoController extends Controller
 {
+    private function configureCloudinary()
+    {
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+    }
+
     public function create()
     {
         return view('cultos.create');
@@ -24,7 +36,9 @@ class CultoController extends Controller
         $validated['activo'] = $request->has('activo');
 
         if ($request->hasFile('imagen')) {
-            $validated['imagen'] = $request->file('imagen')->store('cultos', 'public');
+            $this->configureCloudinary();
+            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
+            $validated['imagen'] = $result['secure_url'];
         }
 
         Culto::create($validated);
@@ -49,10 +63,10 @@ class CultoController extends Controller
         $validated['activo'] = $request->has('activo');
 
         if ($request->hasFile('imagen')) {
-            if ($culto->imagen) Storage::disk('public')->delete($culto->imagen);
-            $validated['imagen'] = $request->file('imagen')->store('cultos', 'public');
-        } elseif ($request->boolean('eliminar_imagen') && $culto->imagen) {
-            Storage::disk('public')->delete($culto->imagen);
+            $this->configureCloudinary();
+            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
+            $validated['imagen'] = $result['secure_url'];
+        } elseif ($request->boolean('eliminar_imagen')) {
             $validated['imagen'] = null;
         }
 
@@ -71,7 +85,6 @@ class CultoController extends Controller
 
     public function destroy(Culto $culto)
     {
-        if ($culto->imagen) Storage::disk('public')->delete($culto->imagen);
         $culto->delete();
         return redirect()->route('anuncios.admin')->with('success', 'Culto eliminado correctamente.');
     }

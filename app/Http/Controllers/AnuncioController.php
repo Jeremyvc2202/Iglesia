@@ -5,11 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Anuncio;
 use App\Models\Culto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
 use Exception;
 
 class AnuncioController extends Controller
 {
+    private function configureCloudinary()
+    {
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+    }
+
     public function index()
     {
         try {
@@ -23,7 +35,6 @@ class AnuncioController extends Controller
         }
 
         try {
-            // Aseguramos que solo se muestren los cultos activos en la vista pública
             $cultos = Culto::where('activo', true)->get();
         } catch (Exception $e) {
             $cultos = collect();
@@ -73,7 +84,9 @@ class AnuncioController extends Controller
         $validated['activo'] = $request->has('activo');
 
         if ($request->hasFile('imagen')) {
-            $validated['imagen'] = $request->file('imagen')->store('anuncios', 'public');
+            $this->configureCloudinary();
+            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
+            $validated['imagen'] = $result['secure_url'];
         }
 
         Anuncio::create($validated);
@@ -98,10 +111,10 @@ class AnuncioController extends Controller
         $validated['activo'] = $request->has('activo');
 
         if ($request->hasFile('imagen')) {
-            if ($anuncio->imagen) Storage::disk('public')->delete($anuncio->imagen);
-            $validated['imagen'] = $request->file('imagen')->store('anuncios', 'public');
-        } elseif ($request->boolean('eliminar_imagen') && $anuncio->imagen) {
-            Storage::disk('public')->delete($anuncio->imagen);
+            $this->configureCloudinary();
+            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
+            $validated['imagen'] = $result['secure_url'];
+        } elseif ($request->boolean('eliminar_imagen')) {
             $validated['imagen'] = null;
         }
 
@@ -112,7 +125,6 @@ class AnuncioController extends Controller
 
     public function destroy(Anuncio $anuncio)
     {
-        if ($anuncio->imagen) Storage::disk('public')->delete($anuncio->imagen);
         $anuncio->delete();
         return redirect()->route('anuncios.admin')->with('success', 'Anuncio eliminado correctamente.');
     }
