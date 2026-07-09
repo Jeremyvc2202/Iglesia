@@ -14,6 +14,9 @@ RUN npm ci
 # Copiar el resto del proyecto para que Vite tenga acceso a las vistas y recursos
 COPY . .
 
+# CORRECCIÓN DE PERMISOS: Asegurar que Alpine le permita a Node ejecutar el binario de Vite
+RUN chmod -R +x node_modules/.bin
+
 # Compilar CSS y JS para producción usando Vite
 RUN npm run build
 
