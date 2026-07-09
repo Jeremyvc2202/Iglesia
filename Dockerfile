@@ -35,6 +35,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+# Fuerza el modo debug para ver el error real
+ENV APP_DEBUG=true
+
 COPY . .
 COPY --from=frontend-assets /app/public/build ./public/build
 
