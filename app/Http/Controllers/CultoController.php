@@ -35,11 +35,15 @@ class CultoController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
+        // --- CÓDIGO COMENTADO PARA TESTEO DE AISLAMIENTO ---
+        /*
         if ($request->hasFile('imagen')) {
             $this->configureCloudinary();
             $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
             $validated['imagen'] = $result['secure_url'];
         }
+        */
+        // ----------------------------------------------------
 
         Culto::create($validated);
 
