@@ -1,11 +1,5 @@
 <?php
 
-// --- INICIO DE DIAGNÓSTICO ---
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// --- FIN DE DIAGNÓSTICO ---
-
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
