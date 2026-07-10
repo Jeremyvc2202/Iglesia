@@ -39,7 +39,7 @@
             <a href="{{ route('cultos.create') }}"
                class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
                style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
-                 + Nuevo culto
+                  + Nuevo culto
             </a>
         </div>
         
@@ -74,7 +74,9 @@
                             <tr class="hover:bg-parchment/70 transition-colors">
                                 <td class="px-6 py-4">
                                     @if ($culto->imagen)
-                                        <img src="{{ asset('storage/' . $culto->imagen) }}" alt="Imagen" class="w-12 h-12 object-cover rounded-lg border border-hairline/60">
+                                        <img src="{{ str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen) }}" 
+                                             alt="Imagen" 
+                                             class="w-12 h-12 object-cover rounded-lg border border-hairline/60">
                                     @else
                                         <div class="w-12 h-12 rounded-lg border border-dashed border-hairline/80 bg-parchment2/40 flex items-center justify-center text-ink/20 text-[10px]">--</div>
                                     @endif
@@ -138,7 +140,7 @@
             <a href="{{ route('anuncios.create') }}"
                class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
                style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
-                 + Nuevo anuncio
+                  + Nuevo anuncio
             </a>
         </div>
 
@@ -159,7 +161,9 @@
                             <tr class="hover:bg-parchment/70 transition-colors">
                                 <td class="px-6 py-4">
                                     @if ($anuncio->imagen)
-                                        <img src="{{ asset('storage/' . $anuncio->imagen) }}" alt="Imagen" class="w-12 h-12 object-cover rounded-lg border border-hairline/60">
+                                        <img src="{{ str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen) }}" 
+                                             alt="Imagen" 
+                                             class="w-12 h-12 object-cover rounded-lg border border-hairline/60">
                                     @else
                                         <div class="w-12 h-12 rounded-lg border border-dashed border-hairline/80 bg-parchment2/40 flex items-center justify-center text-ink/20 text-[10px]">--</div>
                                     @endif

@@ -52,7 +52,8 @@
                     <div class="bg-parchment2/10 backdrop-blur-sm border border-hairline/60 rounded-2xl overflow-hidden hover:border-wine/30 transition-all duration-300 hover:shadow-lg group">
                         @if ($culto->imagen)
                             <div class="h-48 w-full overflow-hidden">
-                                <img src="{{ asset('storage/' . $culto->imagen) }}" alt="{{ $culto->nombre }}" 
+                                <img src="{{ str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen) }}" 
+                                     alt="{{ $culto->nombre }}" 
                                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                             </div>
                         @endif
@@ -112,7 +113,8 @@
                             <div class="space-y-5">
                                 @if ($anuncio->imagen)
                                     <div class="overflow-hidden rounded-2xl border border-hairline/80 shadow-sm transition-all duration-700 group-hover:shadow-[0_8px_24px_rgb(36,31,26,0.08)]">
-                                        <img src="{{ asset('storage/' . $anuncio->imagen) }}" alt="{{ $anuncio->titulo }}"
+                                        <img src="{{ str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen) }}" 
+                                             alt="{{ $anuncio->titulo }}"
                                              class="w-full h-auto max-h-[250px] sm:max-h-[350px] object-cover transition-transform duration-[1.5s] group-hover:scale-110">
                                     </div>
                                 @endif
