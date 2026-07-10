@@ -5,28 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CultoController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 
 // Página principal: muestra los anuncios y cultos activos
 Route::get('/', [AnuncioController::class, 'index'])->name('anuncios.index');
 
-// =========================================================
-// RUTA TEMPORAL REEMPLAZADA PARA DESBLOQUEAR CACHÉ EN DOCKER
-// =========================================================
-Route::get('/acceder', function() {
-    try {
-        // Rompemos el candado de Docker borrando todas las cachés viejas
-        Artisan::call('config:clear');
-        Artisan::call('route:clear');
-        Artisan::call('view:clear');
-        Artisan::call('cache:clear');
-        
-        return "¡Caché destruida con éxito en Render! Las variables de entorno ya están activas.";
-    } catch (\Exception $e) {
-        return "Error al limpiar la caché: " . $e->getMessage();
-    }
-})->name('login');
-
+// Acceso de miembros
+Route::get('/acceder', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/acceder', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/salir', [AuthController::class, 'logout'])->name('logout');
 
@@ -53,17 +37,4 @@ Route::middleware('auth')->group(function () {
         Route::delete('/cultos/{culto}', [CultoController::class, 'destroy'])->name('cultos.destroy');
         Route::post('/cultos/{culto}/toggle', [CultoController::class, 'toggle'])->name('cultos.toggle');
     });
-});
-
-// Ruta anterior por si acaso (puedes ignorarla)
-Route::get('/forzar-migracion-secreta', function() {
-    try {
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        Artisan::call('migrate', ['--force' => true]);
-        
-        return "¡Éxito! Caché limpia y base de datos migrada correctamente.";
-    } catch (\Exception $e) {
-        return "Hubo un error al ejecutar los comandos: " . $e->getMessage();
-    }
 });
