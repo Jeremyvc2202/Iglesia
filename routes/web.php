@@ -38,3 +38,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/cultos/{culto}/toggle', [CultoController::class, 'toggle'])->name('cultos.toggle');
     });
 });
+
+// =========================================================
+// RUTA DE DIAGNÓSTICO PARA VER EL ERROR 500
+// =========================================================
+Route::get('/ver-logs', function() {
+    $path = storage_path('logs/laravel.log');
+    if (!file_exists($path)) {
+        return "El archivo de logs no existe todavía. Asegúrate de intentar subir una imagen primero para generar el error.";
+    }
+    
+    // Lee las últimas 50 líneas del log
+    $lines = file($path);
+    $lastLines = array_slice($lines, -50);
+    return nl2br(implode("", $lastLines));
+});
