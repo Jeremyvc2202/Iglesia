@@ -40,13 +40,16 @@ WORKDIR /var/www/html
 ENV APP_DEBUG=true
 
 COPY . .
+# Copiar configuración de PHP personalizada para aumentar límites de subida
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
 COPY --from=frontend-assets /app/public/build ./public/build
 
 # Instalar Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# --- CÓDIGO NUEVO PARA PERMISOS ---
+# --- CÓDIGO PARA PERMISOS ---
 # Crear carpetas necesarias
 RUN mkdir -p /var/www/html/storage/framework/sessions \
               /var/www/html/storage/framework/views \
