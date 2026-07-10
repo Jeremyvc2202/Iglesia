@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CultoController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 // Página principal: muestra los anuncios y cultos activos
 Route::get('/', [AnuncioController::class, 'index'])->name('anuncios.index');
@@ -37,4 +38,19 @@ Route::middleware('auth')->group(function () {
         Route::delete('/cultos/{culto}', [CultoController::class, 'destroy'])->name('cultos.destroy');
         Route::post('/cultos/{culto}/toggle', [CultoController::class, 'toggle'])->name('cultos.toggle');
     });
+});
+
+// =========================================================
+// RUTA TEMPORAL PARA REPARAR LA BASE DE DATOS EN RENDER
+// =========================================================
+Route::get('/forzar-migracion-secreta', function() {
+    try {
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('migrate', ['--force' => true]);
+        
+        return "¡Éxito! Caché limpia y base de datos migrada correctamente.";
+    } catch (\Exception $e) {
+        return "Hubo un error al ejecutar los comandos: " . $e->getMessage();
+    }
 });
