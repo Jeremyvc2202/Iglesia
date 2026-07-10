@@ -10,8 +10,23 @@ use Illuminate\Support\Facades\Artisan;
 // Página principal: muestra los anuncios y cultos activos
 Route::get('/', [AnuncioController::class, 'index'])->name('anuncios.index');
 
-// Acceso de miembros
-Route::get('/acceder', [AuthController::class, 'showLoginForm'])->name('login');
+// =========================================================
+// RUTA TEMPORAL REEMPLAZADA PARA DESBLOQUEAR CACHÉ EN DOCKER
+// =========================================================
+Route::get('/acceder', function() {
+    try {
+        // Rompemos el candado de Docker borrando todas las cachés viejas
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('cache:clear');
+        
+        return "¡Caché destruida con éxito en Render! Las variables de entorno ya están activas.";
+    } catch (\Exception $e) {
+        return "Error al limpiar la caché: " . $e->getMessage();
+    }
+})->name('login');
+
 Route::post('/acceder', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/salir', [AuthController::class, 'logout'])->name('logout');
 
@@ -40,9 +55,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// =========================================================
-// RUTA TEMPORAL PARA REPARAR LA BASE DE DATOS EN RENDER
-// =========================================================
+// Ruta anterior por si acaso (puedes ignorarla)
 Route::get('/forzar-migracion-secreta', function() {
     try {
         Artisan::call('config:clear');
