@@ -6,6 +6,7 @@ use App\Models\Culto;
 use Illuminate\Http\Request;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use Illuminate\Support\Facades\Log;
 
 class CultoController extends Controller
 {
@@ -20,10 +21,7 @@ class CultoController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return view('cultos.create');
-    }
+    public function create() { return view('cultos.create'); }
 
     public function store(Request $request)
     {
@@ -35,25 +33,22 @@ class CultoController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        // --- CÓDIGO COMENTADO PARA TESTEO DE AISLAMIENTO ---
-        /*
-        if ($request->hasFile('imagen')) {
-            $this->configureCloudinary();
-            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
-            $validated['imagen'] = $result['secure_url'];
+        try {
+            if ($request->hasFile('imagen')) {
+                $this->configureCloudinary();
+                $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
+                $validated['imagen'] = $result['secure_url'];
+            }
+        } catch (\Exception $e) {
+            Log::error("Error Cloudinary (Store Culto): " . $e->getMessage());
+            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
         }
-        */
-        // ----------------------------------------------------
 
         Culto::create($validated);
-
         return redirect()->route('anuncios.admin')->with('success', 'Culto creado correctamente.');
     }
 
-    public function edit(Culto $culto)
-    {
-        return view('cultos.edit', compact('culto'));
-    }
+    public function edit(Culto $culto) { return view('cultos.edit', compact('culto')); }
 
     public function update(Request $request, Culto $culto)
     {
@@ -66,17 +61,21 @@ class CultoController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        if ($request->hasFile('imagen')) {
-            $this->configureCloudinary();
-            $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
-            $validated['imagen'] = $result['secure_url'];
-        } elseif ($request->boolean('eliminar_imagen')) {
-            $validated['imagen'] = null;
+        try {
+            if ($request->hasFile('imagen')) {
+                $this->configureCloudinary();
+                $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
+                $validated['imagen'] = $result['secure_url'];
+            } elseif ($request->boolean('eliminar_imagen')) {
+                $validated['imagen'] = null;
+            }
+        } catch (\Exception $e) {
+            Log::error("Error Cloudinary (Update Culto): " . $e->getMessage());
+            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
         }
 
         unset($validated['eliminar_imagen']);
         $culto->update($validated);
-
         return redirect()->route('anuncios.admin')->with('success', 'Culto actualizado correctamente.');
     }
 
