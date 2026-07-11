@@ -61,6 +61,11 @@
             --color-pine: #1F4741;
             --color-bronze: #A97C50;
             --color-hairline: #DCD2BC;
+
+            /* Claymorfismo — sombra doble (luz arriba-izquierda / sombra abajo-derecha) */
+            --clay-light: rgba(255, 255, 255, 0.85);
+            --clay-dark: rgba(36, 31, 26, 0.14);
+            --clay-bg-grad: linear-gradient(150deg, #FCF9F2, #EEE5D2);
         }
         html.dark {
             --color-bg: #17130F;
@@ -71,14 +76,33 @@
             --color-pine: #5FB3A3;
             --color-bronze: #D3A876;
             --color-hairline: #3B3226;
+
+            --clay-light: rgba(255, 255, 255, 0.05);
+            --clay-dark: rgba(0, 0, 0, 0.6);
+            --clay-bg-grad: linear-gradient(150deg, #241D16, #14100C);
         }
 
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; position: relative; }
         .font-display { font-family: 'Fraunces', serif; font-feature-settings: "liga" 1; }
 
-        /* Repintado de color suave en todo el documento al cambiar de tema */
         body, header, footer, aside, nav, main, .btn, .nav-link, img, svg {
             transition: background-color 450ms ease, border-color 450ms ease, color 450ms ease, box-shadow 450ms ease;
+        }
+
+        /* =========================================
+           FONDO ESPACIAL — resplandores ambientales
+           ========================================= */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% -8%, color-mix(in srgb, var(--color-wine) 14%, transparent), transparent 55%),
+                radial-gradient(circle at 105% 25%, color-mix(in srgb, var(--color-bronze) 14%, transparent), transparent 50%),
+                radial-gradient(circle at 50% 115%, color-mix(in srgb, var(--color-pine) 10%, transparent), transparent 55%);
+            pointer-events: none;
+            transition: background 450ms ease;
         }
 
         /* =========================================
@@ -111,13 +135,11 @@
             background-size: 200% auto;
             color: #FBF8F2 !important;
             transition: background-position 0.5s, transform 240ms cubic-bezier(.34,1.56,.64,1), box-shadow 240ms ease;
-            box-shadow: 0 4px 15px -3px rgba(122, 35, 49, 0.4);
             border: none;
         }
         .btn-dynamic-bg:hover {
             background-position: right center;
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px -10px rgba(169, 124, 80, 0.6);
         }
         /* ========================================= */
 
@@ -181,16 +203,13 @@
         .btn-primary {
             background-color: var(--color-wine);
             color: #FBF8F2;
-            box-shadow: 0 2px 4px rgba(122, 35, 49, 0.08);
         }
         .btn-primary:hover {
             background-color: var(--color-wine2);
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px -10px rgba(122, 35, 49, 0.4);
         }
         .btn-primary:active {
             transform: translateY(0px) scale(0.97);
-            box-shadow: 0 4px 8px -4px rgba(122, 35, 49, 0.3);
         }
         .btn-outline {
             background-color: transparent;
@@ -201,27 +220,39 @@
             background-color: var(--color-wine);
             color: #FBF8F2;
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px -10px rgba(122, 35, 49, 0.25);
         }
         .btn-outline:active {
             transform: translateY(0px) scale(0.97);
         }
-        .btn-ghost {
-            color: var(--color-ink);
-            opacity: 0.6;
-            border: 1px solid var(--color-hairline);
-            background-color: transparent;
+
+        /* =========================================
+           CLAYMORFISMO — superficies con sombra doble
+           ========================================= */
+        .clay-panel {
+            background: var(--clay-bg-grad);
+            border: 1px solid color-mix(in srgb, var(--color-hairline) 55%, transparent);
+            box-shadow: 10px 10px 24px var(--clay-dark), -10px -10px 24px var(--clay-light);
+            transition: box-shadow 400ms ease, transform 350ms cubic-bezier(.34,1.56,.64,1), border-color 400ms ease;
         }
-        .btn-ghost:hover {
-            border-color: var(--color-wine);
-            color: var(--color-wine);
-            opacity: 1;
-            background-color: color-mix(in srgb, var(--color-wine) 5%, transparent);
-            transform: translateY(-1px);
+        .clay-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 14px 14px 32px var(--clay-dark), -14px -14px 32px var(--clay-light);
+        }
+
+        .clay-shadow {
+            box-shadow: 8px 8px 18px var(--clay-dark), -8px -8px 18px var(--clay-light);
+            transition: box-shadow 300ms ease, transform 240ms cubic-bezier(.34,1.56,.64,1);
+        }
+        .clay-shadow:hover {
+            box-shadow: 11px 11px 24px var(--clay-dark), -11px -11px 24px var(--clay-light);
+        }
+        .clay-shadow:active {
+            box-shadow: inset 5px 5px 10px var(--clay-dark), inset -5px -5px 10px var(--clay-light);
+            transform: translateY(1px) scale(0.98);
         }
 
         /* =========================================
-           BOTÓN DE TEMA (claro / oscuro)
+           BOTÓN DE TEMA (claro / oscuro) — clay
            ========================================= */
         .theme-toggle {
             position: relative;
@@ -231,16 +262,18 @@
             align-items: center;
             justify-content: center;
             border-radius: 9999px;
-            border: 1px solid var(--color-hairline);
-            background-color: var(--color-bg2);
-            transition: background-color 300ms ease, border-color 300ms ease, transform 240ms cubic-bezier(.34,1.56,.64,1);
+            border: 1px solid color-mix(in srgb, var(--color-hairline) 60%, transparent);
+            background: var(--clay-bg-grad);
+            box-shadow: 5px 5px 12px var(--clay-dark), -5px -5px 12px var(--clay-light);
+            transition: box-shadow 300ms ease, transform 240ms cubic-bezier(.34,1.56,.64,1);
         }
         .theme-toggle:hover {
-            border-color: var(--color-wine);
             transform: translateY(-2px);
+            box-shadow: 7px 7px 16px var(--clay-dark), -7px -7px 16px var(--clay-light);
         }
         .theme-toggle:active {
             transform: translateY(0) scale(0.94);
+            box-shadow: inset 3px 3px 8px var(--clay-dark), inset -3px -3px 8px var(--clay-light);
         }
         .theme-icon {
             position: absolute;
@@ -269,11 +302,11 @@
         }
 
         /* =========================================
-           LOGO — placa de contraste fija
+           LOGO — placa fija con relieve claymórfico
            ========================================= */
         .logo-plate {
             background-color: #FFFFFF;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px var(--color-hairline);
+            box-shadow: 6px 6px 14px rgba(0,0,0,0.15), -6px -6px 14px rgba(255,255,255,0.65), 0 0 0 1px var(--color-hairline);
             transition: box-shadow 300ms ease, transform 300ms ease;
         }
         .group:hover .logo-plate {
@@ -283,6 +316,9 @@
         #mobile-panel {
             transition: transform 450ms cubic-bezier(.16,1,.3,1);
             transform: translateX(100%);
+            background: var(--clay-bg-grad);
+            box-shadow: -14px 0 34px var(--clay-dark);
+            border-left: 1px solid color-mix(in srgb, var(--color-hairline) 55%, transparent);
         }
         #mobile-panel.is-open {
             transform: translateX(0%);
@@ -361,12 +397,12 @@
                         <a href="<?php echo e(route('anuncios.admin')); ?>" class="nav-link animate-color-flow hover:text-wine">Administrar</a>
                         <form action="<?php echo e(route('logout')); ?>" method="POST" class="inline">
                             <?php echo csrf_field(); ?>
-                            <button type="submit" class="btn btn-outline px-4 py-1.5 rounded-sm text-xs font-semibold uppercase tracking-wider">
+                            <button type="submit" class="btn btn-outline clay-shadow px-4 py-1.5 rounded-2xl text-xs font-semibold uppercase tracking-wider">
                                 Salir
                             </button>
                         </form>
                     <?php else: ?>
-                        <a href="<?php echo e(route('login')); ?>" class="btn btn-dynamic-bg px-5 py-2.5 rounded-sm text-xs font-semibold uppercase tracking-wider">
+                        <a href="<?php echo e(route('login')); ?>" class="btn btn-dynamic-bg clay-shadow px-5 py-2.5 rounded-2xl text-xs font-semibold uppercase tracking-wider">
                             Acceder
                         </a>
                     <?php endif; ?>
@@ -408,7 +444,7 @@
     </header>
 
     <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-ink/30 z-40"></div>
-    <aside id="mobile-panel" class="md:hidden fixed top-0 right-0 h-full w-[80%] max-w-xs bg-parchment z-50 border-l border-hairline/80 shadow-2xl flex flex-col">
+    <aside id="mobile-panel" class="md:hidden fixed top-0 right-0 h-full w-[80%] max-w-xs z-50 flex flex-col">
         <div class="flex items-center justify-between px-6 py-5 border-b border-hairline/60">
             <span class="font-display text-xl font-medium text-dynamic-gradient">Navegación</span>
             <button id="mobile-close" class="w-9 h-9 flex items-center justify-center rounded-full text-ink/50 hover:text-wine hover:bg-parchment2/60 transition" aria-label="Cerrar menú">
@@ -425,12 +461,12 @@
                 <a href="<?php echo e(route('anuncios.admin')); ?>" class="mobile-link block py-3 text-base font-medium animate-color-flow hover:text-wine border-b border-hairline/40 transition-colors">Administrar</a>
                 <form action="<?php echo e(route('logout')); ?>" method="POST" class="mobile-link pt-6">
                     <?php echo csrf_field(); ?>
-                    <button type="submit" class="btn btn-outline w-full py-3 rounded-sm text-xs font-semibold uppercase tracking-wider">
+                    <button type="submit" class="btn btn-outline clay-shadow w-full py-3 rounded-2xl text-xs font-semibold uppercase tracking-wider">
                         Salir del panel
                     </button>
                 </form>
             <?php else: ?>
-                <a href="<?php echo e(route('login')); ?>" class="mobile-link btn btn-dynamic-bg w-full py-3 rounded-sm text-xs font-semibold uppercase tracking-wider mt-6">
+                <a href="<?php echo e(route('login')); ?>" class="mobile-link btn btn-dynamic-bg clay-shadow w-full py-3 rounded-2xl text-xs font-semibold uppercase tracking-wider mt-6">
                     Acceder
                 </a>
             <?php endif; ?>
@@ -451,7 +487,6 @@
 
     <!-- Lógica Interactiva, Temas y Alertas -->
     <script>
-        // Menú lateral y scroll
         const header = document.getElementById('site-header');
         const menuToggle = document.getElementById('menu-toggle');
         const mobilePanel = document.getElementById('mobile-panel');
@@ -486,7 +521,6 @@
             if (e.key === 'Escape') closeMenu();
         });
 
-        // Modo claro / oscuro
         const themeToggle = document.getElementById('theme-toggle');
         const themeToggleMobile = document.getElementById('theme-toggle-mobile');
 
@@ -504,7 +538,6 @@
         themeToggle?.addEventListener('click', toggleTheme);
         themeToggleMobile?.addEventListener('click', toggleTheme);
 
-        // Notificaciones Toast (SweetAlert2)
         <?php if(session('success') || session('error') || session('warning') || session('info')): ?>
             const isDarkTheme = document.documentElement.classList.contains('dark');
             const Toast = Swal.mixin({
@@ -535,9 +568,6 @@
             <?php endif; ?>
         <?php endif; ?>
 
-        // ========================================================
-        // INTERCEPTOR UNIVERSAL — SWEETALERT2 PARA ELIMINACIONES
-        // ========================================================
         document.addEventListener('submit', function (e) {
             if (e.target && e.target.classList.contains('form-eliminar')) {
                 e.preventDefault(); 
@@ -552,8 +582,8 @@
                     background: isDark ? '#211B15' : '#F6F1E7',
                     color: isDark ? '#F1E9DA' : '#241F1A',
                     showCancelButton: true,
-                    confirmButtonColor: '#7A2331', // Color Vino (.bg-wine)
-                    cancelButtonColor: '#A97C50',  // Color Bronce (.bg-bronze)
+                    confirmButtonColor: '#7A2331',
+                    cancelButtonColor: '#A97C50',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar',
                     reverseButtons: true

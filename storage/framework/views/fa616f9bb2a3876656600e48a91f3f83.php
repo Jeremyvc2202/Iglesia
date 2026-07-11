@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Anuncios - Iglesia El Cordero De Dios En El Perú'); ?>
 
-@section('title', 'Anuncios - Iglesia El Cordero De Dios En El Perú')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Hero Section (Encabezado) -->
     <section class="mb-16 sm:mb-24 flex flex-col items-center text-center sm:items-start sm:text-left relative">
@@ -27,12 +25,12 @@
             <div class="h-px bg-gradient-to-r from-hairline to-transparent flex-1 mt-2"></div>
         </div>
 
-        @if ($cultos->isEmpty())
+        <?php if($cultos->isEmpty()): ?>
             <div class="text-center py-10 clay-panel rounded-3xl">
                 <p class="font-display text-xl text-ink">No hay cultos programados en este momento.</p>
             </div>
-        @else
-            @php
+        <?php else: ?>
+            <?php
                 $cultosOrdenados = $cultos->sortBy(function ($culto) {
                     $texto = mb_strtolower($culto->nombre . ' ' . $culto->horario);
 
@@ -43,26 +41,26 @@
 
                     return 5;
                 });
-            @endphp
+            ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($cultosOrdenados as $culto)
+                <?php $__currentLoopData = $cultosOrdenados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $culto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="clay-panel rounded-3xl overflow-hidden group">
-                        @if ($culto->imagen)
+                        <?php if($culto->imagen): ?>
                             <div class="h-48 w-full overflow-hidden rounded-t-3xl">
-                                <img src="{{ str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen) }}" 
-                                     alt="{{ $culto->nombre }}" 
+                                <img src="<?php echo e(str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen)); ?>" 
+                                     alt="<?php echo e($culto->nombre); ?>" 
                                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                             </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="p-6 text-center">
-                            <h3 class="font-display text-xl text-ink mb-2">{{ $culto->nombre }}</h3>
-                            <p class="text-wine font-bold font-mono tracking-wider">{{ $culto->horario }}</p>
+                            <h3 class="font-display text-xl text-ink mb-2"><?php echo e($culto->nombre); ?></h3>
+                            <p class="text-wine font-bold font-mono tracking-wider"><?php echo e($culto->horario); ?></p>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
-        @endif
+        <?php endif; ?>
     </section>
 
     <!-- Sección de Anuncios -->
@@ -72,68 +70,72 @@
             <div class="h-px bg-gradient-to-r from-hairline to-transparent flex-1 mt-2"></div>
         </div>
 
-        @if ($anuncios->isEmpty())
+        <?php if($anuncios->isEmpty()): ?>
             <div class="text-center py-20 sm:py-24 clay-panel rounded-3xl flex flex-col items-center justify-center gap-4">
                 <span class="text-5xl opacity-40 mb-2 drop-shadow-sm">🕊</span>
                 <p class="font-display text-2xl text-ink text-balance">No hay anuncios publicados por el momento.</p>
                 <p class="text-base text-ink/60 font-medium font-body max-w-sm text-balance">Vuelve más tarde para enterarte de nuestras novedades y próximos eventos.</p>
             </div>
-        @else
+        <?php else: ?>
             <div class="space-y-8">
-                @foreach ($anuncios as $anuncio)
+                <?php $__currentLoopData = $anuncios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $anuncio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <article class="group relative clay-panel p-5 sm:p-8 rounded-3xl">
                         <div class="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-5 md:gap-10 items-start relative z-10">
                             
                             <!-- Columna Fecha -->
                             <div class="flex flex-row md:flex-col items-center md:items-start justify-between md:justify-start gap-4 pb-4 border-b border-hairline/80 md:pb-0 md:border-b-0 md:border-r md:border-hairline/80 md:pr-8 h-full">
-                                @if ($anuncio->fecha_evento)
+                                <?php if($anuncio->fecha_evento): ?>
                                     <div class="font-mono text-wine leading-none flex items-baseline md:flex-col gap-2 group-hover:scale-105 transition-transform duration-300 origin-left">
-                                        <span class="block text-4xl sm:text-5xl font-bold tracking-tighter">{{ $anuncio->fecha_evento->format('d') }}</span>
+                                        <span class="block text-4xl sm:text-5xl font-bold tracking-tighter"><?php echo e($anuncio->fecha_evento->format('d')); ?></span>
                                         <div class="flex flex-col gap-1 text-right md:text-left">
                                             <span class="text-[10px] sm:text-[11px] uppercase font-bold tracking-widest text-wine/80">
-                                                {{ $anuncio->fecha_evento->translatedFormat('l') }}
+                                                <?php echo e($anuncio->fecha_evento->translatedFormat('l')); ?>
+
                                             </span>
                                             <span class="text-[10px] sm:text-[11px] uppercase tracking-widest text-ink/50 font-bold">
-                                                {{ $anuncio->fecha_evento->translatedFormat('F Y') }}
+                                                <?php echo e($anuncio->fecha_evento->translatedFormat('F Y')); ?>
+
                                             </span>
                                         </div>
                                     </div>
-                                @else
+                                <?php else: ?>
                                     <span class="inline-flex items-center justify-center px-4 py-1.5 clay-shadow bg-gradient-to-r from-wine/10 to-bronze/10 text-wine rounded-full font-mono text-[10px] sm:text-[11px] uppercase tracking-widest font-bold border border-wine/20">
                                         Aviso
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
                             <!-- Columna Contenido -->
                             <div class="space-y-5">
-                                @if ($anuncio->imagen)
+                                <?php if($anuncio->imagen): ?>
                                     <div class="overflow-hidden rounded-2xl border border-hairline/80 shadow-sm transition-all duration-700 group-hover:shadow-[0_8px_24px_rgb(36,31,26,0.08)]">
-                                        <img src="{{ str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen) }}" 
-                                             alt="{{ $anuncio->titulo }}"
+                                        <img src="<?php echo e(str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen)); ?>" 
+                                             alt="<?php echo e($anuncio->titulo); ?>"
                                              class="w-full h-auto max-h-[250px] sm:max-h-[350px] object-cover transition-transform duration-[1.5s] group-hover:scale-110">
                                     </div>
-                                @endif
+                                <?php endif; ?>
                                 
                                 <div class="space-y-3 pt-1">
                                     <h3 class="font-display text-2xl sm:text-3xl text-ink tracking-tight group-hover:text-wine transition-colors duration-300 text-pretty">
-                                        {{ $anuncio->titulo }}
+                                        <?php echo e($anuncio->titulo); ?>
+
                                     </h3>
                                     <div class="w-12 h-0.5 bg-bronze/30 group-hover:w-24 group-hover:bg-wine/50 transition-all duration-500"></div>
                                     <p class="text-ink/75 leading-relaxed text-base sm:text-lg whitespace-pre-line font-body pt-2 text-pretty">
-                                        {{ $anuncio->contenido }}
+                                        <?php echo e($anuncio->contenido); ?>
+
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </article>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
-        @endif
+        <?php endif; ?>
     </section>
 
     <!-- Versículo rotativo -->
-    @include('partials.versiculos')
+    <?php echo $__env->make('partials.versiculos', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Footer Profesional -->
     <footer class="mt-24 pt-16 pb-12 border-t border-hairline/30">
@@ -177,7 +179,7 @@
 
         <div class="mt-16 text-center border-t border-hairline/20 pt-8">
             <p class="text-[10px] uppercase tracking-[0.2em] text-ink/40 font-bold">
-                &copy; {{ date('Y') }} Iglesia El Cordero De Dios En El Perú
+                &copy; <?php echo e(date('Y')); ?> Iglesia El Cordero De Dios En El Perú
             </p>
         </div>
     </footer>
@@ -186,7 +188,7 @@
     <!-- MÚSICA DE FONDO AUTOMÁTICA E INVISIBLE                            -->
     <!-- ================================================================= -->
     <audio id="bg-music" loop>
-        <source src="{{ asset('audio/audio.mp3') }}" type="audio/mpeg">
+        <source src="<?php echo e(asset('audio/audio.mp3')); ?>" type="audio/mpeg">
     </audio>
 
     <script>
@@ -209,4 +211,5 @@
     </script>
     <!-- ================================================================= -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\iglesia\resources\views/anuncios/index.blade.php ENDPATH**/ ?>
