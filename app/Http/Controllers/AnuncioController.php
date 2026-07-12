@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anuncio;
-use App\Models\Culto;
 use Illuminate\Http\Request;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
-use Exception;
 use Illuminate\Support\Facades\Log;
 
 class AnuncioController extends Controller
@@ -21,6 +19,25 @@ class AnuncioController extends Controller
                 'api_secret' => env('CLOUDINARY_API_SECRET'),
             ],
         ]);
+    }
+
+    public function index()
+    {
+        // Muestra los anuncios activos en la página principal
+        $anuncios = Anuncio::where('activo', true)->latest()->get();
+        return view('index', compact('anuncios'));
+    }
+
+    public function admin()
+    {
+        // Muestra el listado de anuncios en el panel administrativo
+        $anuncios = Anuncio::latest()->get();
+        return view('admin.anuncios.index', compact('anuncios'));
+    }
+
+    public function create()
+    {
+        return view('admin.anuncios.create');
     }
 
     public function store(Request $request)
@@ -47,6 +64,11 @@ class AnuncioController extends Controller
 
         Anuncio::create($validated);
         return redirect()->route('anuncios.admin')->with('success', 'Anuncio creado correctamente.');
+    }
+
+    public function edit(Anuncio $anuncio)
+    {
+        return view('admin.anuncios.edit', compact('anuncio'));
     }
 
     public function update(Request $request, Anuncio $anuncio)
@@ -79,5 +101,16 @@ class AnuncioController extends Controller
         return redirect()->route('anuncios.admin')->with('success', 'Anuncio actualizado correctamente.');
     }
 
-    // ... (Mantén tus otros métodos: index, admin, toggle, create, edit, destroy iguales)
+    public function destroy(Anuncio $anuncio)
+    {
+        $anuncio->delete();
+        return redirect()->route('anuncios.admin')->with('success', 'Anuncio eliminado correctamente.');
+    }
+
+    public function toggle(Anuncio $anuncio)
+    {
+        $anuncio->activo = !$anuncio->activo;
+        $anuncio->save();
+        return back()->with('success', 'Estado actualizado correctamente.');
+    }
 }

@@ -24,11 +24,12 @@ class Anuncio extends Model
         'activo' => 'boolean',
     ];
 
-    /**
-     * URL pública de la imagen del anuncio (o null si no tiene).
-     */
     public function getImagenUrlAttribute(): ?string
     {
-        return $this->imagen ? asset('storage/'.$this->imagen) : null;
+        if (!$this->imagen) return null;
+
+        // Si la imagen ya tiene 'http', es un link de Cloudinary, lo devolvemos directo.
+        // Si no, asumimos que es un archivo local antiguo y usamos asset().
+        return str_starts_with($this->imagen, 'http') ? $this->imagen : asset('storage/'.$this->imagen);
     }
 }
