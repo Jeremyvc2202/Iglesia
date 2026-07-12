@@ -64,6 +64,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN chmod +x entrypoint.sh
+RUN echo "clear_env = no" >> /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 10000
 ENTRYPOINT ["/var/www/html/entrypoint.sh"]
