@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anuncio;
+use App\Models\Culto;
 use Illuminate\Http\Request;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class AnuncioController extends Controller
@@ -14,30 +16,36 @@ class AnuncioController extends Controller
     {
         Configuration::instance([
             'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                'api_key'    => env('CLOUDINARY_API_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET'),
+                'cloud_name' => config('services.cloudinary.cloud_name'),
+                'api_key'    => config('services.cloudinary.api_key'),
+                'api_secret' => config('services.cloudinary.api_secret'),
             ],
         ]);
     }
 
     public function index()
     {
-        // Muestra los anuncios activos en la página principal
-        $anuncios = Anuncio::where('activo', true)->latest()->get();
-        return view('index', compact('anuncios'));
+        $anuncios = Anuncio::where('activo', true)
+            ->orderByRaw('fecha_evento IS NULL ASC')
+            ->orderBy('fecha_evento', 'asc')
+            ->orderByDesc('created_at')
+            ->get();
+        
+        $cultos = Culto::where('activo', true)->get();
+
+        return view('anuncios.index', compact('anuncios', 'cultos'));
     }
 
     public function admin()
     {
-        // Muestra el listado de anuncios en el panel administrativo
-        $anuncios = Anuncio::latest()->get();
-        return view('admin.anuncios.index', compact('anuncios'));
+        $anuncios = Anuncio::orderByDesc('created_at')->get();
+        $cultos = Culto::all();
+        return view('anuncios.admin', compact('anuncios', 'cultos'));
     }
 
     public function create()
     {
-        return view('admin.anuncios.create');
+        return view('anuncios.create');
     }
 
     public function store(Request $request)
@@ -51,15 +59,15 @@ class AnuncioController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        try {
-            if ($request->hasFile('imagen')) {
+        if ($request->hasFile('imagen')) {
+            try {
                 $this->configureCloudinary();
                 $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
                 $validated['imagen'] = $result['secure_url'];
+            } catch (Exception $e) {
+                Log::error("Error Cloudinary: " . $e->getMessage());
+                return back()->withErrors(['imagen' => 'No se pudo subir la imagen a la nube.']);
             }
-        } catch (\Exception $e) {
-            Log::error("Error Cloudinary (Store Anuncio): " . $e->getMessage());
-            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
         }
 
         Anuncio::create($validated);
@@ -68,7 +76,7 @@ class AnuncioController extends Controller
 
     public function edit(Anuncio $anuncio)
     {
-        return view('admin.anuncios.edit', compact('anuncio'));
+        return view('anuncios.edit', compact('anuncio'));
     }
 
     public function update(Request $request, Anuncio $anuncio)
@@ -83,17 +91,17 @@ class AnuncioController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        try {
-            if ($request->hasFile('imagen')) {
+        if ($request->hasFile('imagen')) {
+            try {
                 $this->configureCloudinary();
                 $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
                 $validated['imagen'] = $result['secure_url'];
-            } elseif ($request->boolean('eliminar_imagen')) {
-                $validated['imagen'] = null;
+            } catch (Exception $e) {
+                Log::error("Error Cloudinary: " . $e->getMessage());
+                return back()->withErrors(['imagen' => 'Error subiendo la imagen.']);
             }
-        } catch (\Exception $e) {
-            Log::error("Error Cloudinary (Update Anuncio): " . $e->getMessage());
-            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
+        } elseif ($request->boolean('eliminar_imagen')) {
+            $validated['imagen'] = null;
         }
 
         unset($validated['eliminar_imagen']);
@@ -111,6 +119,6 @@ class AnuncioController extends Controller
     {
         $anuncio->activo = !$anuncio->activo;
         $anuncio->save();
-        return back()->with('success', 'Estado actualizado correctamente.');
+        return back()->with('success', 'Estado actualizado.');
     }
 }
