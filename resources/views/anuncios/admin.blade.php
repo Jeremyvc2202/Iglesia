@@ -37,13 +37,13 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Cultos</h2>
             <a href="{{ route('cultos.create') }}"
-               class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
+               class="clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment transition-transform hover:scale-105"
                style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
                   + Nuevo culto
             </a>
         </div>
         
-        <div class="bg-parchment2/30 backdrop-blur-sm border border-hairline/60 rounded-2xl overflow-hidden">
+        <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm min-w-[700px]">
                     <thead>
@@ -86,7 +86,7 @@
                                 <td class="px-6 py-4">
                                     <form action="{{ route('cultos.toggle', $culto) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border {{ $culto->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10' }}">
+                                        <button type="submit" class="clay-shadow text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border {{ $culto->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10' }}">
                                             {{ $culto->activo ? 'Activo' : 'Inactivo' }}
                                         </button>
                                     </form>
@@ -138,13 +138,13 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Anuncios</h2>
             <a href="{{ route('anuncios.create') }}"
-               class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
+               class="clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment transition-transform hover:scale-105"
                style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
                   + Nuevo anuncio
             </a>
         </div>
 
-        <div class="bg-parchment2/30 backdrop-blur-sm border border-hairline/60 rounded-2xl overflow-hidden">
+        <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm min-w-[700px]">
                     <thead>
@@ -173,7 +173,7 @@
                                 <td class="px-6 py-4">
                                     <form action="{{ route('anuncios.toggle', $anuncio) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border {{ $anuncio->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10' }}">
+                                        <button type="submit" class="clay-shadow text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border {{ $anuncio->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10' }}">
                                             {{ $anuncio->activo ? 'Activo' : 'Inactivo' }}
                                         </button>
                                     </form>

@@ -16,7 +16,7 @@
         </div>
 
         <!-- Tarjeta del formulario -->
-        <div class="bg-parchment2/30 backdrop-blur-sm p-6 sm:p-10 rounded-2xl border border-hairline/60 shadow-[0_4px_24px_rgb(36,31,26,0.04)] relative transition-all duration-500 hover:shadow-[0_4px_30px_rgb(122,35,49,0.06)]">
+        <div class="clay-panel p-6 sm:p-10 rounded-3xl relative">
             
             <form action="{{ route('anuncios.store') }}" method="POST" enctype="multipart/form-data" class="relative z-10">
                 @csrf
@@ -28,11 +28,11 @@
 
                 <!-- Botones de Acción -->
                 <div class="flex flex-col sm:flex-row items-center gap-4 mt-12 pt-8 border-t border-hairline/60">
-                    <button type="submit" class="btn btn-dynamic-bg w-full sm:w-auto px-8 py-3.5 rounded-lg font-bold text-sm tracking-widest uppercase">
+                    <button type="submit" class="btn btn-dynamic-bg clay-shadow w-full sm:w-auto px-8 py-3.5 rounded-lg font-bold text-sm tracking-widest uppercase">
                         Guardar anuncio
                     </button>
                     
-                    <a href="{{ route('anuncios.admin') }}" class="btn btn-ghost w-full sm:w-auto px-6 py-3.5 rounded-lg font-semibold text-sm tracking-widest uppercase text-center">
+                    <a href="{{ route('anuncios.admin') }}" class="btn btn-ghost clay-shadow w-full sm:w-auto px-6 py-3.5 rounded-lg font-semibold text-sm tracking-widest uppercase text-center">
                         Cancelar
                     </a>
                 </div>

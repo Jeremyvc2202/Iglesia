@@ -7,7 +7,7 @@
     <div class="max-w-md mx-auto relative group">
         
         <!-- Tarjeta del formulario -->
-        <div class="bg-parchment2/40 backdrop-blur-md p-8 sm:p-10 rounded-2xl border border-hairline/80 shadow-[0_8px_30px_rgb(36,31,26,0.06)] relative overflow-hidden transition-all duration-500 hover:shadow-[0_8px_40px_rgb(122,35,49,0.08)]">
+        <div class="clay-panel p-8 sm:p-10 rounded-3xl relative overflow-hidden">
             
             <!-- Resplandor decorativo de fondo -->
             <div class="absolute inset-0 bg-gradient-to-br from-wine/5 to-transparent opacity-50 pointer-events-none"></div>
@@ -42,7 +42,7 @@
                         Correo electrónico
                     </label>
                     <input type="email" name="email" value="{{ old('email') }}"
-                           class="w-full bg-parchment/90 border border-hairline rounded-lg px-4 py-3 text-ink placeholder:text-ink/30 focus:outline-none focus:border-wine focus:ring-4 focus:ring-wine/10 transition-all duration-300 shadow-sm"required autofocus>
+                           class="clay-inset w-full bg-parchment/60 rounded-lg px-4 py-3 text-ink placeholder:text-ink/30 transition-all duration-300" required autofocus>
                 </div>
 
                 <div class="group/input relative">
@@ -50,7 +50,7 @@
                         Contraseña
                     </label>
                     <input type="password" name="password" id="password"
-                           class="w-full bg-parchment/90 border border-hairline rounded-lg px-4 py-3 text-ink placeholder:text-ink/30 focus:outline-none focus:border-wine focus:ring-4 focus:ring-wine/10 transition-all duration-300 shadow-sm pr-12">
+                           class="clay-inset w-full bg-parchment/60 rounded-lg px-4 py-3 text-ink placeholder:text-ink/30 transition-all duration-300 pr-12">
                     
                     <!-- Botón del ojo -->
                     <button type="button" onclick="togglePassword()" class="absolute right-3 top-[38px] text-ink/40 hover:text-wine transition-colors focus:outline-none">
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button type="submit" class="btn btn-dynamic-bg w-full px-5 py-3.5 rounded-lg font-bold text-sm tracking-widest uppercase">
+                    <button type="submit" class="btn btn-dynamic-bg clay-shadow w-full px-5 py-3.5 rounded-lg font-bold text-sm tracking-widest uppercase">
                         Ingresar
                     </button>
                 </div>
