@@ -12,7 +12,6 @@ class CultoController extends Controller
 {
     private function configureCloudinary()
     {
-        // CORREGIDO: Usamos config() en lugar de env()
         Configuration::instance([
             'cloud' => [
                 'cloud_name' => config('services.cloudinary.cloud_name'),
@@ -41,8 +40,8 @@ class CultoController extends Controller
                 $validated['imagen'] = $result['secure_url'];
             }
         } catch (\Exception $e) {
-            Log::error("Error Cloudinary (Store Culto): " . $e->getMessage());
-            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
+            // MODIFICADO PARA DIAGNÓSTICO
+            dd("ERROR EN CLOUDINARY (STORE CULTO): " . $e->getMessage());
         }
 
         Culto::create($validated);
@@ -71,8 +70,8 @@ class CultoController extends Controller
                 $validated['imagen'] = null;
             }
         } catch (\Exception $e) {
-            Log::error("Error Cloudinary (Update Culto): " . $e->getMessage());
-            return back()->withErrors(['imagen' => 'Error subiendo imagen: ' . $e->getMessage()]);
+            // MODIFICADO PARA DIAGNÓSTICO
+            dd("ERROR EN CLOUDINARY (UPDATE CULTO): " . $e->getMessage());
         }
 
         unset($validated['eliminar_imagen']);

@@ -65,8 +65,8 @@ class AnuncioController extends Controller
                 $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
                 $validated['imagen'] = $result['secure_url'];
             } catch (Exception $e) {
-                Log::error("Error Cloudinary: " . $e->getMessage());
-                return back()->withErrors(['imagen' => 'No se pudo subir la imagen a la nube.']);
+                // MODIFICADO PARA DIAGNÓSTICO
+                dd("ERROR EN CLOUDINARY (STORE ANUNCIO): " . $e->getMessage());
             }
         }
 
@@ -97,8 +97,8 @@ class AnuncioController extends Controller
                 $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'anuncios']);
                 $validated['imagen'] = $result['secure_url'];
             } catch (Exception $e) {
-                Log::error("Error Cloudinary: " . $e->getMessage());
-                return back()->withErrors(['imagen' => 'Error subiendo la imagen.']);
+                // MODIFICADO PARA DIAGNÓSTICO
+                dd("ERROR EN CLOUDINARY (UPDATE ANUNCIO): " . $e->getMessage());
             }
         } elseif ($request->boolean('eliminar_imagen')) {
             $validated['imagen'] = null;
