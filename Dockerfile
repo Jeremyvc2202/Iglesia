@@ -23,6 +23,7 @@ RUN apk add --no-cache \
     freetype-dev \
     libzip-dev \
     libpq-dev \
+    curl-dev \
     zip \
     unzip \
     git \
@@ -30,7 +31,7 @@ RUN apk add --no-cache \
 
 # Instalar extensiones PHP (incluyendo soporte para PostgreSQL)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql pdo_pgsql gd zip bcmath
+    && docker-php-ext-install pdo_mysql pdo_pgsql gd zip bcmath curl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
