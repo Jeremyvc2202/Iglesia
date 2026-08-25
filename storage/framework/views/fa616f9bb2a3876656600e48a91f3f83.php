@@ -1,4 +1,5 @@
 <?php $__env->startSection('title', 'Anuncios - Iglesia El Cordero De Dios En El Perú'); ?>
+<?php $__env->startSection('ocultar_footer', true); ?>
 
 <?php $__env->startSection('content'); ?>
 
@@ -9,7 +10,7 @@
             Pucallpa · Perú
         </p>
         
-        <h1 class="font-display text-5xl sm:text-6xl md:text-7xl leading-[1.1] mb-5 max-w-3xl text-dynamic-gradient text-balance pb-3">
+        <h1 class="font-display text-4xl sm:text-6xl md:text-7xl leading-[1.1] mb-5 max-w-3xl text-dynamic-gradient text-balance pb-3">
             Conectados como iglesia.
         </h1>
         
@@ -158,7 +159,7 @@
                     Únete a nuestro grupo oficial de WhatsApp para recibir anuncios en tiempo real.
                 </p>
                 <a href="https://chat.whatsapp.com/DTuddDKGlFN7WkKOulogf4" target="_blank" 
-                   class="inline-block px-6 py-2 clay-shadow bg-wine text-parchment2 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-bronze transition-colors">
+                   class="btn btn-dynamic-bg clay-shadow px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest">
                     Unirse al Grupo
                 </a>
             </div>
@@ -183,33 +184,6 @@
             </p>
         </div>
     </footer>
-
-    <!-- ================================================================= -->
-    <!-- MÚSICA DE FONDO AUTOMÁTICA E INVISIBLE                            -->
-    <!-- ================================================================= -->
-    <audio id="bg-music" loop>
-        <source src="<?php echo e(asset('audio/audio.mp3')); ?>" type="audio/mpeg">
-    </audio>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const music = document.getElementById('bg-music');
-            music.volume = 1.0; 
-
-            const iniciarMusica = () => {
-                music.play().then(() => {
-                    document.removeEventListener('click', iniciarMusica);
-                    document.removeEventListener('touchstart', iniciarMusica);
-                }).catch(error => {
-                    console.log("El navegador bloqueó el inicio automático. Esperando clic...");
-                });
-            };
-
-            document.addEventListener('click', iniciarMusica);
-            document.addEventListener('touchstart', iniciarMusica);
-        });
-    </script>
-    <!-- ================================================================= -->
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\iglesia\resources\views/anuncios/index.blade.php ENDPATH**/ ?>

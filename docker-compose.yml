@@ -1,0 +1,28 @@
+services:
+  iglesia:
+    build: .
+    container_name: iglesia-web
+    restart: unless-stopped
+    ports:
+      - "80:10000"
+    environment:
+      APP_NAME: "Iglesia El Cordero De Dios en el Peru"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: base64:D0EjlVioVDhX/H5IMO9OdNcOAMKwcDBV5FeY2j2yqxU=
+      APP_URL: http://localhost
+      APP_LOCALE: es
+      DB_CONNECTION: sqlite
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      FILESYSTEM_DISK: local
+      LOG_CHANNEL: stack
+    volumes:
+      # Persistencia: base de datos e imágenes sobreviven a reinicios y reconstrucciones
+      - sqlite-data:/var/www/html/database
+      - imagenes:/var/www/html/storage/app/public
+
+volumes:
+  sqlite-data:
+  imagenes:

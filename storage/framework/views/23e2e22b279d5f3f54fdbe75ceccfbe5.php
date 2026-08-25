@@ -1,27 +1,27 @@
-@if ($errors->any())
+<?php if($errors->any()): ?>
     <div class="mb-8 border border-wine/30 bg-wine/5 text-wine px-4 py-3 text-sm rounded">
         <ul class="list-disc list-inside space-y-1">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </ul>
     </div>
-@endif
+<?php endif; ?>
 
 <div class="space-y-6">
     <div>
         <label class="form-label">Imagen (opcional)</label>
 
-        @if (isset($anuncio) && $anuncio->imagen)
+        <?php if(isset($anuncio) && $anuncio->imagen): ?>
             <div class="mb-4 w-full max-w-xs">
-                <img src="{{ $anuncio->imagen_url }}" alt="Imagen actual del anuncio"
+                <img src="<?php echo e($anuncio->imagen_url); ?>" alt="Imagen actual del anuncio"
                      class="w-full h-40 object-cover rounded-xl border border-hairline shadow-sm">
                 <label class="flex items-center gap-2 mt-2 text-xs text-ink/50 cursor-pointer w-fit">
                     <input type="checkbox" name="eliminar_imagen" value="1" class="w-3.5 h-3.5 accent-wine">
                     Quitar esta imagen
                 </label>
             </div>
-        @endif
+        <?php endif; ?>
 
         <label for="imagen-input"
                class="flex flex-col items-center justify-center gap-2 w-full border border-dashed border-hairline rounded-xl py-10 px-4 cursor-pointer hover:border-wine hover:bg-parchment2/40 transition-colors duration-200 bg-parchment">
@@ -29,7 +29,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M4 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <span class="text-sm text-ink/60 font-medium text-center" id="imagen-label">
-                {{ isset($anuncio) && $anuncio->imagen ? 'Cambiar imagen' : 'Haz clic para subir una imagen' }}
+                <?php echo e(isset($anuncio) && $anuncio->imagen ? 'Cambiar imagen' : 'Haz clic para subir una imagen'); ?>
+
             </span>
             <span class="text-xs text-ink/40 font-mono">JPG, PNG o WEBP · máx. 4 MB</span>
             <input id="imagen-input" type="file" name="imagen" accept="image/*" class="hidden">
@@ -40,7 +41,7 @@
 
     <div>
         <label class="form-label">Título</label>
-        <input type="text" name="titulo" value="{{ old('titulo', $anuncio->titulo ?? '') }}"
+        <input type="text" name="titulo" value="<?php echo e(old('titulo', $anuncio->titulo ?? '')); ?>"
                class="form-input"
                placeholder="Ej: Culto especial de Navidad" required>
     </div>
@@ -49,19 +50,20 @@
         <label class="form-label">Contenido</label>
         <textarea name="contenido" rows="5"
                   class="form-input resize-y"
-                  placeholder="Detalles del anuncio..." required>{{ old('contenido', $anuncio->contenido ?? '') }}</textarea>
+                  placeholder="Detalles del anuncio..." required><?php echo e(old('contenido', $anuncio->contenido ?? '')); ?></textarea>
     </div>
 
     <div>
         <label class="form-label">Fecha del evento (opcional)</label>
         <input type="date" name="fecha_evento"
-               value="{{ old('fecha_evento', isset($anuncio) && $anuncio->fecha_evento ? $anuncio->fecha_evento->format('Y-m-d') : '') }}"
+               value="<?php echo e(old('fecha_evento', isset($anuncio) && $anuncio->fecha_evento ? $anuncio->fecha_evento->format('Y-m-d') : '')); ?>"
                class="form-input sm:w-64">
     </div>
 
     <label class="flex items-center gap-2.5 cursor-pointer w-fit">
         <input type="checkbox" name="activo" value="1"
-               {{ old('activo', $anuncio->activo ?? true) ? 'checked' : '' }}
+               <?php echo e(old('activo', $anuncio->activo ?? true) ? 'checked' : ''); ?>
+
                class="w-4 h-4 accent-wine">
         <span class="text-sm text-ink/70">Mostrar en la página pública</span>
     </label>
@@ -85,4 +87,4 @@
         };
         reader.readAsDataURL(file);
     });
-</script>
+</script><?php /**PATH C:\laragon\www\iglesia\resources\views/anuncios/_form.blade.php ENDPATH**/ ?>

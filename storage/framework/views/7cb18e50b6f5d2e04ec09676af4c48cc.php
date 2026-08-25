@@ -35,18 +35,17 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Cultos</h2>
             <a href="<?php echo e(route('cultos.create')); ?>"
-               class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
-               style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
+               class="btn btn-dynamic-bg clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase">
                   + Nuevo culto
             </a>
         </div>
         
-        <div class="bg-parchment2/30 backdrop-blur-sm border border-hairline/60 rounded-2xl overflow-hidden">
+        <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm min-w-[700px]">
+                <table class="w-full text-sm min-w-[540px]">
                     <thead>
                         <tr class="border-b border-hairline/80 bg-parchment2/50">
-                            <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
+                            <th class="hidden sm:table-cell px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Culto</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Horario</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Estado</th>
@@ -70,7 +69,7 @@
 
                         <?php $__currentLoopData = $cultosOrdenados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $culto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-parchment/70 transition-colors">
-                                <td class="px-6 py-4">
+                                <td class="hidden sm:table-cell px-6 py-4">
                                     <?php if($culto->imagen): ?>
                                         <img src="<?php echo e(str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen)); ?>" 
                                              alt="Imagen" 
@@ -84,7 +83,7 @@
                                 <td class="px-6 py-4">
                                     <form action="<?php echo e(route('cultos.toggle', $culto)); ?>" method="POST">
                                         <?php echo csrf_field(); ?>
-                                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border <?php echo e($culto->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10'); ?>">
+                                        <button type="submit" class="clay-shadow text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border <?php echo e($culto->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10'); ?>">
                                             <?php echo e($culto->activo ? 'Activo' : 'Inactivo'); ?>
 
                                         </button>
@@ -138,18 +137,17 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Anuncios</h2>
             <a href="<?php echo e(route('anuncios.create')); ?>"
-               class="px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment shadow-md transition-all hover:scale-105"
-               style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
+               class="btn btn-dynamic-bg clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase">
                   + Nuevo anuncio
             </a>
         </div>
 
-        <div class="bg-parchment2/30 backdrop-blur-sm border border-hairline/60 rounded-2xl overflow-hidden">
+        <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm min-w-[700px]">
+                <table class="w-full text-sm min-w-[540px]">
                     <thead>
                         <tr class="border-b border-hairline/80 bg-parchment2/50">
-                            <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
+                            <th class="hidden sm:table-cell px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Título</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Fecha</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Estado</th>
@@ -159,7 +157,7 @@
                     <tbody class="divide-y divide-hairline/50">
                         <?php $__currentLoopData = $anuncios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $anuncio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-parchment/70 transition-colors">
-                                <td class="px-6 py-4">
+                                <td class="hidden sm:table-cell px-6 py-4">
                                     <?php if($anuncio->imagen): ?>
                                         <img src="<?php echo e(str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen)); ?>" 
                                              alt="Imagen" 
@@ -173,7 +171,7 @@
                                 <td class="px-6 py-4">
                                     <form action="<?php echo e(route('anuncios.toggle', $anuncio)); ?>" method="POST">
                                         <?php echo csrf_field(); ?>
-                                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border <?php echo e($anuncio->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10'); ?>">
+                                        <button type="submit" class="clay-shadow text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border <?php echo e($anuncio->activo ? 'bg-pine/10 text-pine border-pine/20' : 'bg-ink/5 text-ink/60 border-ink/10'); ?>">
                                             <?php echo e($anuncio->activo ? 'Activo' : 'Inactivo'); ?>
 
                                         </button>
@@ -220,10 +218,10 @@
         </div>
     </section>
 
-    <!-- CRONOTRIGER DE NOTIFICACIÓN FLOTANTE (ESTILO PUSH/TOAST NATIVO) -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" onload="inicializarNotificacion()"></script>
+    <!-- NOTIFICACIÓN FLOTANTE (ESTILO PUSH/TOAST NATIVO) -->
     <script>
         function inicializarNotificacion() {
+            const esOscuro = document.documentElement.classList.contains('dark');
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -231,9 +229,9 @@
                 showCloseButton: true,
                 timer: 5000,
                 timerProgressBar: true,
-                background: '#FAF6F0',
-                color: '#241F1A',
-                iconColor: '#A97C50',
+                background: esOscuro ? '#211B15' : '#FAF6F0',
+                color: esOscuro ? '#F1E9DA' : '#241F1A',
+                iconColor: esOscuro ? '#D3A876' : '#A97C50',
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer)
                     toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -243,14 +241,15 @@
             Toast.fire({
                 icon: 'success',
                 title: '<?php echo e($saludo); ?>',
-                html: '<span style="font-family: inherit; font-size: 12.5px; color: rgba(36,31,26,0.75);">Has ingresado con éxito al Panel de Control.</span>',
+                html: '<span style="font-family: inherit; font-size: 12.5px; opacity: 0.75;">Has ingresado con éxito al Panel de Control.</span>',
                 customClass: {
-                    popup: 'rounded-xl border border-hairline/60 shadow-2xl p-4',
-                    title: 'font-display text-sm font-bold text-ink text-left',
+                    popup: 'rounded-xl shadow-2xl p-4',
+                    title: 'font-display text-sm font-bold text-left',
                     htmlContainer: 'text-left mt-0.5'
                 }
             });
         }
+        inicializarNotificacion();
     </script>
 
 <?php $__env->stopSection(); ?>

@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Nuevo Culto')
 
-@section('content')
+<?php $__env->startSection('title', 'Nuevo Culto'); ?>
+
+<?php $__env->startSection('content'); ?>
 
     <div class="max-w-3xl mx-auto">
         <!-- Encabezado de la sección -->
@@ -18,18 +18,18 @@
         <!-- Tarjeta del formulario -->
         <div class="clay-panel p-6 sm:p-10 rounded-3xl relative">
             
-            @if ($errors->any())
+            <?php if($errors->any()): ?>
                 <div class="mb-8 border border-wine/30 bg-wine/5 text-wine px-4 py-3 text-sm rounded">
                     <ul class="list-disc list-inside space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <form action="{{ route('cultos.store') }}" method="POST" enctype="multipart/form-data" class="relative z-10">
-                @csrf
+            <form action="<?php echo e(route('cultos.store')); ?>" method="POST" enctype="multipart/form-data" class="relative z-10">
+                <?php echo csrf_field(); ?>
                 
                 <div class="space-y-6">
                     <!-- Zona de Carga de Imagen -->
@@ -55,7 +55,7 @@
                     <!-- Nombre del Culto -->
                     <div>
                         <label class="form-label">Nombre del Culto</label>
-                        <input type="text" name="nombre" value="{{ old('nombre') }}"
+                        <input type="text" name="nombre" value="<?php echo e(old('nombre')); ?>"
                                class="form-input"
                                placeholder="Ej: Culto Dominical de Adoración" required>
                     </div>
@@ -63,7 +63,7 @@
                     <!-- Horario -->
                     <div>
                         <label class="form-label">Horario</label>
-                        <input type="text" name="horario" value="{{ old('horario') }}"
+                        <input type="text" name="horario" value="<?php echo e(old('horario')); ?>"
                                class="form-input"
                                placeholder="Ej: Domingos - 10:00 AM" required>
                     </div>
@@ -75,7 +75,7 @@
                         Guardar culto
                     </button>
 
-                    <a href="{{ route('anuncios.admin') }}" class="btn btn-outline clay-shadow w-full sm:w-auto px-6 py-3.5 rounded-lg font-semibold text-sm tracking-widest uppercase text-center">
+                    <a href="<?php echo e(route('anuncios.admin')); ?>" class="btn btn-outline clay-shadow w-full sm:w-auto px-6 py-3.5 rounded-lg font-semibold text-sm tracking-widest uppercase text-center">
                         Cancelar
                     </a>
                 </div>
@@ -105,4 +105,5 @@
         });
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\iglesia\resources\views/cultos/create.blade.php ENDPATH**/ ?>

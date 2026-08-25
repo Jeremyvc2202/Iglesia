@@ -37,8 +37,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Fuerza el modo debug para ver el error real
-ENV APP_DEBUG=true
+# Producción: debug desactivado (se puede activar con docker run -e APP_DEBUG=true)
+ENV APP_DEBUG=false \
+    APP_ENV=production
 
 COPY . .
 # Copiar configuración de PHP personalizada para aumentar límites de subida
@@ -55,12 +56,14 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN mkdir -p /var/www/html/storage/framework/sessions \
               /var/www/html/storage/framework/views \
               /var/www/html/storage/framework/cache \
+              /var/www/html/storage/app/public \
               /var/www/html/storage/logs \
-              /var/www/html/bootstrap/cache
+              /var/www/html/bootstrap/cache \
+              /var/www/html/database
 
-# Asignar permisos totales (soluciona el Failed to open stream)
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Asignar permisos (storage, cache y database para SQLite)
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 # ---------------------------------
 
 COPY nginx.conf /etc/nginx/nginx.conf

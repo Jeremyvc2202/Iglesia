@@ -31,9 +31,6 @@
 </section>
 
 <style>
-    #versiculo-progreso {
-        transition: width linear;
-    }
     #versiculo-box.is-fading #versiculo-texto,
     #versiculo-box.is-fading #versiculo-ref {
         opacity: 0 !important;

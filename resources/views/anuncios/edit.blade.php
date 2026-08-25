@@ -4,22 +4,38 @@
 
 @section('content')
 
-    <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-bronze mb-3">Panel interno</p>
-    <h1 class="font-display text-3xl text-ink mb-10">Editar anuncio</h1>
-
-    <form action="{{ route('anuncios.update', $anuncio) }}" method="POST" enctype="multipart/form-data" class="max-w-xl">
-        @csrf
-        @method('PUT')
-        @include('anuncios._form')
-
-        <div class="flex gap-3 mt-8">
-            <button type="submit" class="btn btn-primary px-6 py-2.5 rounded font-medium text-sm">
-                Actualizar anuncio
-            </button>
-            <a href="{{ route('anuncios.admin') }}" class="btn btn-ghost px-6 py-2.5 rounded text-sm">
-                Cancelar
-            </a>
+    <div class="max-w-3xl mx-auto">
+        <!-- Encabezado de la sección -->
+        <div class="mb-10">
+            <div class="flex items-center gap-3 mb-3">
+                <span class="w-8 h-px bg-bronze/50"></span>
+                <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-bronze font-bold">Panel interno</p>
+            </div>
+            <h1 class="font-display text-3xl sm:text-4xl text-dynamic-gradient inline-block mb-2">Editar anuncio</h1>
+            <p class="text-ink/60 text-sm font-medium">Actualiza el contenido del anuncio o gestiona su visibilidad pública.</p>
         </div>
-    </form>
+
+        <!-- Tarjeta del formulario -->
+        <div class="clay-panel p-6 sm:p-10 rounded-3xl relative">
+
+            <form action="{{ route('anuncios.update', $anuncio) }}" method="POST" enctype="multipart/form-data" class="relative z-10">
+                @csrf
+                @method('PUT')
+                @include('anuncios._form')
+
+                <!-- Botones de Acción -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 mt-12 pt-8 border-t border-hairline/60">
+                    <button type="submit" class="btn btn-dynamic-bg clay-shadow w-full sm:w-auto px-8 py-3.5 rounded-lg font-bold text-sm tracking-widest uppercase">
+                        Actualizar anuncio
+                    </button>
+
+                    <a href="{{ route('anuncios.admin') }}" class="btn btn-outline clay-shadow w-full sm:w-auto px-6 py-3.5 rounded-lg font-semibold text-sm tracking-widest uppercase text-center">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
 
 @endsection

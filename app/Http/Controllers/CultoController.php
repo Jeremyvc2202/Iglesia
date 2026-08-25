@@ -4,23 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Culto;
 use Illuminate\Http\Request;
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Api\Upload\UploadApi;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CultoController extends Controller
 {
-    private function configureCloudinary()
-    {
-        Configuration::instance([
-            'cloud' => [
-                'cloud_name' => config('services.cloudinary.cloud_name'),
-                'api_key'    => config('services.cloudinary.api_key'),
-                'api_secret' => config('services.cloudinary.api_secret'),
-            ],
-        ]);
-    }
-
     public function create() { return view('cultos.create'); }
 
     public function store(Request $request)
@@ -33,15 +20,8 @@ class CultoController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        try {
-            if ($request->hasFile('imagen')) {
-                $this->configureCloudinary();
-                $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
-                $validated['imagen'] = $result['secure_url'];
-            }
-        } catch (\Exception $e) {
-            // MODIFICADO PARA DIAGNÓSTICO
-            dd("ERROR EN CLOUDINARY (STORE CULTO): " . $e->getMessage());
+        if ($request->hasFile('imagen')) {
+            $validated['imagen'] = $request->file('imagen')->store('cultos', 'public');
         }
 
         Culto::create($validated);
@@ -61,17 +41,12 @@ class CultoController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        try {
-            if ($request->hasFile('imagen')) {
-                $this->configureCloudinary();
-                $result = (new UploadApi())->upload($request->file('imagen')->getRealPath(), ['folder' => 'cultos']);
-                $validated['imagen'] = $result['secure_url'];
-            } elseif ($request->boolean('eliminar_imagen')) {
-                $validated['imagen'] = null;
-            }
-        } catch (\Exception $e) {
-            // MODIFICADO PARA DIAGNÓSTICO
-            dd("ERROR EN CLOUDINARY (UPDATE CULTO): " . $e->getMessage());
+        if ($request->hasFile('imagen')) {
+            $this->borrarImagenLocal($culto->imagen);
+            $validated['imagen'] = $request->file('imagen')->store('cultos', 'public');
+        } elseif ($request->boolean('eliminar_imagen')) {
+            $this->borrarImagenLocal($culto->imagen);
+            $validated['imagen'] = null;
         }
 
         unset($validated['eliminar_imagen']);
@@ -88,7 +63,15 @@ class CultoController extends Controller
 
     public function destroy(Culto $culto)
     {
+        $this->borrarImagenLocal($culto->imagen);
         $culto->delete();
         return redirect()->route('anuncios.admin')->with('success', 'Culto eliminado correctamente.');
+    }
+
+    private function borrarImagenLocal(?string $ruta): void
+    {
+        if ($ruta && !str_starts_with($ruta, 'http')) {
+            Storage::disk('public')->delete($ruta);
+        }
     }
 }

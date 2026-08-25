@@ -53,33 +53,33 @@
            TOKENS DE COLOR — claro / oscuro
            ========================================= */
         :root {
-            --color-bg: #F6F1E7;
-            --color-bg2: #EFE7D6;
-            --color-ink: #241F1A;
-            --color-wine: #7A2331;
-            --color-wine2: #5C1A25;
-            --color-pine: #1F4741;
-            --color-bronze: #A97C50;
-            --color-hairline: #DCD2BC;
+            --color-bg: #F7F3EA;
+            --color-bg2: #EEE7D5;
+            --color-ink: #25201A;
+            --color-wine: #75212F;
+            --color-wine2: #5A1826;
+            --color-pine: #1E5049;
+            --color-bronze: #9C6F45;
+            --color-hairline: #DED3BC;
 
             /* Claymorfismo — sombra doble (luz arriba-izquierda / sombra abajo-derecha) */
             --clay-light: rgba(255, 255, 255, 0.85);
-            --clay-dark: rgba(36, 31, 26, 0.14);
-            --clay-bg-grad: linear-gradient(150deg, #FCF9F2, #EEE5D2);
+            --clay-dark: rgba(37, 32, 26, 0.13);
+            --clay-bg-grad: linear-gradient(150deg, #FDFAF4, #EDE4D1);
         }
         html.dark {
-            --color-bg: #17130F;
-            --color-bg2: #211B15;
-            --color-ink: #F1E9DA;
-            --color-wine: #D9647A;
-            --color-wine2: #E58198;
-            --color-pine: #5FB3A3;
-            --color-bronze: #D3A876;
-            --color-hairline: #3B3226;
+            --color-bg: #14100C;
+            --color-bg2: #1D1712;
+            --color-ink: #EFE8DA;
+            --color-wine: #DE7B8D;
+            --color-wine2: #E995A4;
+            --color-pine: #67B7A6;
+            --color-bronze: #D2A97B;
+            --color-hairline: #362D22;
 
             --clay-light: rgba(255, 255, 255, 0.05);
-            --clay-dark: rgba(0, 0, 0, 0.6);
-            --clay-bg-grad: linear-gradient(150deg, #241D16, #14100C);
+            --clay-dark: rgba(0, 0, 0, 0.55);
+            --clay-bg-grad: linear-gradient(150deg, #231C15, #130F0B);
         }
 
         body { font-family: 'Inter', system-ui, sans-serif; position: relative; }
@@ -98,9 +98,9 @@
             inset: 0;
             z-index: -1;
             background:
-                radial-gradient(circle at 15% -8%, color-mix(in srgb, var(--color-wine) 14%, transparent), transparent 55%),
-                radial-gradient(circle at 105% 25%, color-mix(in srgb, var(--color-bronze) 14%, transparent), transparent 50%),
-                radial-gradient(circle at 50% 115%, color-mix(in srgb, var(--color-pine) 10%, transparent), transparent 55%);
+                radial-gradient(circle at 15% -8%, color-mix(in srgb, var(--color-wine) 9%, transparent), transparent 55%),
+                radial-gradient(circle at 105% 25%, color-mix(in srgb, var(--color-bronze) 10%, transparent), transparent 50%),
+                radial-gradient(circle at 50% 115%, color-mix(in srgb, var(--color-pine) 7%, transparent), transparent 55%);
             pointer-events: none;
             transition: background 450ms ease;
         }
@@ -223,6 +223,58 @@
         }
         .btn-outline:active {
             transform: translateY(0px) scale(0.97);
+        }
+        .btn-ghost {
+            background-color: transparent;
+            border: 1px solid var(--color-hairline);
+            color: var(--color-ink);
+        }
+        .btn-ghost:hover {
+            background-color: color-mix(in srgb, var(--color-hairline) 35%, transparent);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           INPUTS UNIFICADOS
+           ========================================= */
+        .form-label {
+            display: block;
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+            color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+        }
+        .form-input {
+            width: 100%;
+            background-color: color-mix(in srgb, var(--color-bg) 70%, transparent);
+            border: 1px solid color-mix(in srgb, var(--color-hairline) 80%, transparent);
+            border-radius: 0.75rem;
+            padding: 0.7rem 1rem;
+            color: var(--color-ink);
+            transition: border-color 200ms ease, box-shadow 200ms ease, background-color 450ms ease;
+        }
+        .form-input::placeholder {
+            color: color-mix(in srgb, var(--color-ink) 32%, transparent);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-wine);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-wine) 12%, transparent);
+        }
+        .clay-inset {
+            background-color: color-mix(in srgb, var(--color-bg2) 65%, transparent);
+            border: 1px solid transparent;
+            box-shadow: inset 4px 4px 8px var(--clay-dark), inset -4px -4px 8px var(--clay-light);
+            transition: box-shadow 250ms ease, background-color 450ms ease;
+        }
+        .clay-inset:focus {
+            outline: none;
+            border-color: color-mix(in srgb, var(--color-wine) 45%, transparent);
+            box-shadow: inset 3px 3px 6px var(--clay-dark), inset -3px -3px 6px var(--clay-light),
+                        0 0 0 3px color-mix(in srgb, var(--color-wine) 10%, transparent);
         }
 
         /* =========================================
@@ -477,6 +529,8 @@
         @yield('content')
     </main>
     
+    @hasSection('ocultar_footer')
+    @else
     <footer class="border-t border-hairline/80 bg-parchment2/10 mt-auto">
         <div class="max-w-4xl mx-auto px-5 sm:px-8 py-8 flex items-center justify-center">
             <span class="text-xs font-medium text-ink/40 tracking-wide text-center">
@@ -484,6 +538,7 @@
             </span>
         </div>
     </footer>
+    @endif
 
     <!-- Lógica Interactiva, Temas y Alertas -->
     <script>

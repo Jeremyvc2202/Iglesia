@@ -37,18 +37,17 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Cultos</h2>
             <a href="{{ route('cultos.create') }}"
-               class="clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment transition-transform hover:scale-105"
-               style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
+               class="btn btn-dynamic-bg clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase">
                   + Nuevo culto
             </a>
         </div>
         
         <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm min-w-[700px]">
+                <table class="w-full text-sm min-w-[540px]">
                     <thead>
                         <tr class="border-b border-hairline/80 bg-parchment2/50">
-                            <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
+                            <th class="hidden sm:table-cell px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Culto</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Horario</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Estado</th>
@@ -72,7 +71,7 @@
 
                         @foreach ($cultosOrdenados as $culto)
                             <tr class="hover:bg-parchment/70 transition-colors">
-                                <td class="px-6 py-4">
+                                <td class="hidden sm:table-cell px-6 py-4">
                                     @if ($culto->imagen)
                                         <img src="{{ str_starts_with($culto->imagen, 'http') ? $culto->imagen : asset('storage/' . $culto->imagen) }}" 
                                              alt="Imagen" 
@@ -138,18 +137,17 @@
         <div class="flex items-center justify-between mb-8">
             <h2 class="font-display text-2xl text-ink">Gestión de Anuncios</h2>
             <a href="{{ route('anuncios.create') }}"
-               class="clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase text-parchment transition-transform hover:scale-105"
-               style="background: linear-gradient(90deg, #7A2331, #A97C50, #7A2331);">
+               class="btn btn-dynamic-bg clay-shadow px-5 py-2.5 rounded-lg font-mono text-[11px] font-bold tracking-widest uppercase">
                   + Nuevo anuncio
             </a>
         </div>
 
         <div class="clay-panel rounded-3xl overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm min-w-[700px]">
+                <table class="w-full text-sm min-w-[540px]">
                     <thead>
                         <tr class="border-b border-hairline/80 bg-parchment2/50">
-                            <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
+                            <th class="hidden sm:table-cell px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Imagen</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Título</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Fecha</th>
                             <th class="px-6 py-5 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-ink/60">Estado</th>
@@ -159,7 +157,7 @@
                     <tbody class="divide-y divide-hairline/50">
                         @foreach ($anuncios as $anuncio)
                             <tr class="hover:bg-parchment/70 transition-colors">
-                                <td class="px-6 py-4">
+                                <td class="hidden sm:table-cell px-6 py-4">
                                     @if ($anuncio->imagen)
                                         <img src="{{ str_starts_with($anuncio->imagen, 'http') ? $anuncio->imagen : asset('storage/' . $anuncio->imagen) }}" 
                                              alt="Imagen" 
@@ -218,10 +216,10 @@
         </div>
     </section>
 
-    <!-- CRONOTRIGER DE NOTIFICACIÓN FLOTANTE (ESTILO PUSH/TOAST NATIVO) -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" onload="inicializarNotificacion()"></script>
+    <!-- NOTIFICACIÓN FLOTANTE (ESTILO PUSH/TOAST NATIVO) -->
     <script>
         function inicializarNotificacion() {
+            const esOscuro = document.documentElement.classList.contains('dark');
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -229,9 +227,9 @@
                 showCloseButton: true,
                 timer: 5000,
                 timerProgressBar: true,
-                background: '#FAF6F0',
-                color: '#241F1A',
-                iconColor: '#A97C50',
+                background: esOscuro ? '#211B15' : '#FAF6F0',
+                color: esOscuro ? '#F1E9DA' : '#241F1A',
+                iconColor: esOscuro ? '#D3A876' : '#A97C50',
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer)
                     toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -241,14 +239,15 @@
             Toast.fire({
                 icon: 'success',
                 title: '{{ $saludo }}',
-                html: '<span style="font-family: inherit; font-size: 12.5px; color: rgba(36,31,26,0.75);">Has ingresado con éxito al Panel de Control.</span>',
+                html: '<span style="font-family: inherit; font-size: 12.5px; opacity: 0.75;">Has ingresado con éxito al Panel de Control.</span>',
                 customClass: {
-                    popup: 'rounded-xl border border-hairline/60 shadow-2xl p-4',
-                    title: 'font-display text-sm font-bold text-ink text-left',
+                    popup: 'rounded-xl shadow-2xl p-4',
+                    title: 'font-display text-sm font-bold text-left',
                     htmlContainer: 'text-left mt-0.5'
                 }
             });
         }
+        inicializarNotificacion();
     </script>
 
 @endsection
